@@ -1,0 +1,13 @@
+plugin:
+  name: "OneBot v11 协议实现"
+  description: "OneBot v11 协议实现插件，可用于接入任意支持onebot v11协议的平台"
+  author: "一只大猫条"
+
+  mainClass: "org.sereinfish.catcat.framework.onebot.v11.PluginMain"
+
+dependencies:
+  implementations:
+    - "com.squareup.okhttp3:okhttp:4.12.0"
+  plugins:
+    - "org.catcat.sereinfish.qqbot.universal.abstraction.layer"
+    - "org.sereinfish.catcat.framework.eventhandler.extend"

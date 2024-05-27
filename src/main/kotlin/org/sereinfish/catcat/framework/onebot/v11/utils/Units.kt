@@ -1,0 +1,56 @@
+package org.sereinfish.catcat.framework.onebot.v11.utils
+
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import kotlin.experimental.ExperimentalTypeInference
+
+class MapBuilder<K ,V> {
+    private val map = mutableMapOf<K, V>()
+
+    infix fun K.to(value: V) {
+        map[this] = value
+    }
+
+    fun build(): Map<K, V> = map
+}
+
+fun <T> Boolean.isTrue(block: Boolean.() -> T): T? {
+    return if (this) block() else null
+}
+
+fun <T> Boolean.isFlase(block: Boolean.() -> T): T? {
+    return if (this.not()) block() else null
+}
+
+@OptIn(ExperimentalTypeInference::class)
+fun <T: Any, R> T?.isNonNull(@BuilderInference block: (T) -> R): R? {
+    return this?.let {
+        block(it)
+    }
+}
+
+val Boolean.toOneBotInt get() = if (this) 1 else 0
+
+@OptIn(ExperimentalTypeInference::class)
+fun <K, V> buildCatMap(@BuilderInference builder: MapBuilder<K, V>.() -> Unit): Map<K, V> {
+    return MapBuilder<K, V>().apply(builder).build()
+}
+
+val JsonElement.asStringOrNull: String? get() =
+    if (this.isJsonPrimitive)
+        if (this.asJsonPrimitive.isString)
+            this.asString
+        else null
+    else null
+
+val JsonElement.asIntOrNull: Int? get() =
+    if (this.isJsonPrimitive)
+        if (this.asJsonPrimitive.isNumber)
+            this.asInt
+        else null
+    else null
+
+val JsonElement.asJsonObjectOrNUll: JsonObject? get() =
+    if (this.isJsonObject)
+        this.asJsonObject
+    else null
