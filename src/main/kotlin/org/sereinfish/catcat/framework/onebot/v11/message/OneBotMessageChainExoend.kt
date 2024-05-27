@@ -5,6 +5,7 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageFactory
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.element.*
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.forward.ForwardMessageFactory
 import org.sereinfish.cat.frame.utils.toClass
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
@@ -39,6 +40,10 @@ class BuildMessageChain: MessageFactory {
 
     override fun face(id: Int): Face {
         return OneBotFace(id)
+    }
+
+    override fun forward(): ForwardMessageFactory {
+        return OneBotForwardMessageFactory()
     }
 
     override fun reply(messageId: Int): Reply {

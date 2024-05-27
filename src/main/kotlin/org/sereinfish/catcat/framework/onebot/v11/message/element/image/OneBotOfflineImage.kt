@@ -1,5 +1,6 @@
 package org.sereinfish.catcat.framework.onebot.v11.message.element.image
 
+import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.onebot.v11.message.element.OneBotImage
 import org.sereinfish.catcat.framework.onebot.v11.utils.buildCatMap
 import org.sereinfish.catcat.framework.onebot.v11.utils.isNonNull
@@ -19,6 +20,8 @@ class OneBotOfflineImage private constructor(
     override val id: String get() = error("离线图片尚未分配ID")
 
     companion object {
+        private val logger = logger()
+
         fun buildByFile(
             file: File,
             isFlash: Boolean = false,
@@ -47,7 +50,9 @@ class OneBotOfflineImage private constructor(
             timeout: Long? = null
         ): OneBotOfflineImage {
             // 将传入的图片文件流编码为 base64 字符串
-            val base64 = Base64.getEncoder().encodeToString(inputStream.readBytes())
+            val bytes = inputStream.readBytes()
+            logger.info("image bytes size = ${bytes.size}")
+            val base64 = Base64.getEncoder().encodeToString(bytes)
             return OneBotOfflineImage(file = "base64://$base64", isFlash, isCache, isProxy, timeout)
         }
     }

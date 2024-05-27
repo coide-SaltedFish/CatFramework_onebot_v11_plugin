@@ -4,6 +4,8 @@
 
 还在完善中...
 
+[**猫爬架**](https://github.com/coide-SaltedFish/CatFramework)的OneBot11协议实现
+
 ## 连接到Bot
 
 引入插件并启动框架初始化信息后，在框架根目录下的`data/config/org.sereinfish.catcat.framework.onebot.v11/`文件夹下创建`config.yml`文件，写入如下配置

@@ -87,7 +87,7 @@ internal class OneBotReverseWebSocket(
             } ?: logger.warn("接收到事件[$echo]，但未找到对应处理器：$data")
 
         }catch (e: Exception) {
-            logger.error("接口数据解析失败", e)
+            logger.error("接口数据解析失败：$data", e)
         }
     }
 

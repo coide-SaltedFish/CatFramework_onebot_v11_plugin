@@ -32,6 +32,7 @@ class OneBotMessageParser {
         register(OneBotVideo)
         register(OneBotVoice)
         register(OneBotReply)
+        register(OneBotForward)
     }
 
     fun register(parser: MessageParser) = parsers.put(parser.type, parser)

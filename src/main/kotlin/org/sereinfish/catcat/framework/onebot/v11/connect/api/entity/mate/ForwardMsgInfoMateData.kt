@@ -26,7 +26,7 @@ data class ForwardMsgInfoMateData(
         val messageId: Int,
         val realId: Int,
         val sender: UserInfoMateData,
-        val message: List<MessageItemMateData>,
+        val message: JsonElement,
         val peerId: Long,
     ){
         companion object: ApiResponseParser<Message> {
@@ -39,7 +39,7 @@ data class ForwardMsgInfoMateData(
                     obj["message_id"].asInt,
                     obj["real_id"].asInt,
                     UserInfoMateData.parser(obj["sender"]),
-                    obj["message"].asJsonArray.map { MessageItemMateData.parser(it) },
+                    obj["message"],
                     obj["peer_id"].asLong
                 )
             }

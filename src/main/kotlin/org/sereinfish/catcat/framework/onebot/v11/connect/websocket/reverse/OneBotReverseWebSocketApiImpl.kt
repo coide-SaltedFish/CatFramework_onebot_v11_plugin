@@ -272,13 +272,16 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
                         // 收到数据
                         try {
                             if (data.asJsonObject["retcode"].asInt != 0) {
+                                logger.debug(data.toJson())
                                 logger.error("接口返回异常：{action:$action,params:${buildCatMap(params).toJson()}}")
                                 error(
-                                    "接口请求失败，结果返回：${
+                                    "接口请求失败，结果返回[${
                                         data.asJsonObjectOrNUll?.get("status")?.asStringOrNull
                                     }(${
                                         data.asJsonObjectOrNUll?.get("retcode")?.asIntOrNull
-                                    })"
+                                    })]: ${
+                                        data.asJsonObjectOrNUll?.get("message")?.asStringOrNull
+                                    }"
                                 )
                             }
 
