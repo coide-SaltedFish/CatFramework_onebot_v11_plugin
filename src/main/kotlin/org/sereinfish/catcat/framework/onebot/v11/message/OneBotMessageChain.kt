@@ -8,6 +8,13 @@ import org.sereinfish.catcat.framework.onebot.v11.message.element.forward.OneBot
 
 internal open class OneBotMessageChain: MessageChain, ArrayList<Message>() {
 
+    internal fun marge(messageChain: MessageChain){
+        messageChain.forEach {
+            if (it is MessageChain) marge(it)
+            else add(it)
+        }
+    }
+
     override fun encode(): Any {
         val list = ArrayList<Any>()
         encode(list, this)

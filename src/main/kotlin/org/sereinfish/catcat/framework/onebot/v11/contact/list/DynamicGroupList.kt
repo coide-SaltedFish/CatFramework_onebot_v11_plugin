@@ -50,4 +50,12 @@ internal class DynamicGroupList(
             }
         })
     }
+
+    override fun get(key: Long): Group? {
+        return super.get(key) ?: runCatching {
+            OneBotGroup.build(bot, key)
+        }.getOrNull()?.also {
+            this[it.id] = it
+        }
+    }
 }

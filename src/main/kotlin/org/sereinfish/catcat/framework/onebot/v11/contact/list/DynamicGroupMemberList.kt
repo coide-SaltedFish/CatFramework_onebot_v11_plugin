@@ -1,5 +1,6 @@
 package org.sereinfish.catcat.framework.onebot.v11.contact.list
 
+import kotlinx.coroutines.runBlocking
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.Bot
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.notice.GroupMemberDecreaseEvent
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.notice.GroupMemberIncreaseEvent
@@ -51,5 +52,11 @@ internal class DynamicGroupMemberList(
                 this@DynamicGroupMemberList[newMember.id] = newMember
             }
         })
+    }
+
+    override fun get(key: Long): OneBotMember? {
+        return super.get(key) ?: runCatching { OneBotMember.build(bot, group, key) }.getOrNull()?.also {
+            this[it.id] = it
+        }
     }
 }

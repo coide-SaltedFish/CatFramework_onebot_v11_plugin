@@ -4,13 +4,16 @@ import com.google.gson.JsonElement
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
+import okhttp3.OkHttpClient
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
+import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.cat.frame.utils.toJson
 import org.sereinfish.catcat.framework.onebot.v11.connect.api.OneBotApi
 import org.sereinfish.catcat.framework.onebot.v11.connect.api.entity.mate.*
 import org.sereinfish.catcat.framework.onebot.v11.connect.api.entity.parser.ApiResponseParser
 import org.sereinfish.catcat.framework.onebot.v11.connect.request.OneBotRequestData
+import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSendingEvent
 import org.sereinfish.catcat.framework.onebot.v11.utils.*
 import kotlin.coroutines.resume
 

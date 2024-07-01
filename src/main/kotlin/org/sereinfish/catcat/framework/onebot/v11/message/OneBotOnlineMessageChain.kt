@@ -4,6 +4,8 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.Bot
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Contact
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Group
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.User
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageReceipt
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.OnlineMessageChain
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
@@ -29,5 +31,12 @@ internal class OneBotOnlineMessageChain(
                 false
             }
         }
+    }
+
+    override suspend fun reply(message: Message): MessageReceipt {
+        return target.sendMessage(bot.messageFactory().build {
+            + reply(messageId)
+            + message
+        })
     }
 }

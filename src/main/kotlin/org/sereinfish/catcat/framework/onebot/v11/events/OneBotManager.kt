@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.Bot
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.BotManager
 import org.sereinfish.cat.frame.config.getClassOrNull
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
@@ -33,6 +34,7 @@ object OneBotManager {
         bots.forEach { botInfo ->
             // 构建连接
             val bot = botInfo.connect()
+            BotManager.register(bot) // 注册到通用接口层
             logger.info("已通过[${botInfo.type.name}]连接到Bot: ${bot.name}[${bot.id}]")
         }
     }

@@ -3,15 +3,20 @@ package org.sereinfish.catcat.framework.onebot.v11.contact
 import kotlinx.coroutines.runBlocking
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Friend
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageReceipt
+import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
+import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSendingEvent
+import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSentEvent
+import org.sereinfish.catcat.framework.onebot.v11.message.buildMessageChain
 
 class OneBotFriend private constructor(
-    override val bot: OneBot,
-    override val id: Long,
-    override val nickname: String,
+    bot: OneBot,
+    id: Long,
+    nickname: String,
     override val remarkNickname: String
-): Friend {
+): Friend, OneBotUser(bot, id, nickname) {
     override val name: String = nickname
 
     companion object {
@@ -28,7 +33,14 @@ class OneBotFriend private constructor(
      * 发起私聊
      */
     override suspend fun sendMessage(message: Message): MessageReceipt {
-        return bot.connect.api.sendPrivateMsg(id, message).getOrThrow().parser(bot, message)
+        EventManager.broadcast(OneBotPrivateSendingEvent(bot, if (message is MessageChain) message else buildMessageChain { +message }, bot, this))
+        return bot.connect.api.sendPrivateMsg(id, message).getOrThrow().parser(bot, message).also {
+            // 获取消息
+            val retMessageInfo = bot.connect.api.getMsg(it.messageId).getOrThrow()
+            val onlineMessage = bot.messageParser.parserOnline(bot, this, bot, it.messageId, retMessageInfo.message)
+            // 广播事件
+            EventManager.broadcast(OneBotPrivateSentEvent(bot, retMessageInfo.time, it.bot, onlineMessage, this))
+        }
     }
 
     override fun toString(): String {

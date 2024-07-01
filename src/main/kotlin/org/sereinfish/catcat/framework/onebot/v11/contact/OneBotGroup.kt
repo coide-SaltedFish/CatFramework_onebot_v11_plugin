@@ -6,8 +6,11 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Group
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Member
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageReceipt
+import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.contact.list.DynamicGroupMemberList
+import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotGroupMessageSendingEvent
+import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotGroupMessageSentEvent
 
 class OneBotGroup private constructor(
     override val bot: OneBot,
@@ -53,7 +56,14 @@ class OneBotGroup private constructor(
     }
 
     override suspend fun sendMessage(message: Message): MessageReceipt {
-        return bot.connect.api.sendGroupMsg(this.id, message).getOrThrow().parser(bot, message)
+        EventManager.broadcast(OneBotGroupMessageSendingEvent(bot, message, this, bot))
+        return bot.connect.api.sendGroupMsg(this.id, message).getOrThrow().parser(bot, message).also {
+            // 获取消息
+            val retMessageInfo = bot.connect.api.getMsg(it.messageId).getOrThrow()
+            val onlineMessage = bot.messageParser.parserOnline(bot, this, bot, it.messageId, retMessageInfo.message)
+
+            EventManager.broadcast(OneBotGroupMessageSentEvent(bot, this, bot, onlineMessage))
+        }
     }
 
     override fun toString(): String {

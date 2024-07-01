@@ -2,6 +2,14 @@ package org.sereinfish.catcat.framework.onebot.v11.utils
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Contact
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.message.send.MessageSendingEvent
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
+import org.sereinfish.cat.frame.event.EventManager
+import org.sereinfish.catcat.framework.onebot.v11.OneBot
+import org.sereinfish.catcat.framework.onebot.v11.connect.api.entity.mate.ForwardMsgInfoMateData
+import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSendingEvent
+import org.sereinfish.catcat.framework.onebot.v11.message.buildMessageChain
 import kotlin.experimental.ExperimentalTypeInference
 
 class MapBuilder<K ,V> {
