@@ -2,9 +2,11 @@ package org.sereinfish.catcat.framework.onebot.v11.message.element.forward
 
 import kotlinx.coroutines.runBlocking
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
 import org.sereinfish.catcat.framework.onebot.v11.message.OneBotMessageParser
 import org.sereinfish.catcat.framework.onebot.v11.message.element.OneBotForward
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
 
 class OneBotOnlineForward(
     val id: String
@@ -17,13 +19,13 @@ class OneBotOnlineForward(
 
         return data.messages.map {
             val message = OneBotMessageParser.parse(it.message)
-            OneBotOnlineNode(message, it.sender.userId, it.sender.nickname)
+            OneBotOnlineNode(message, it.sender.userId.toUniversalId(), it.sender.nickname)
         }
     }
 
     class OneBotOnlineNode(
         override val message: MessageChain,
-        override val userId: Long,
+        override val userId: UniversalId,
         override val nickname: String
     ) : OneBotNode
 }

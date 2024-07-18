@@ -6,7 +6,6 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.message.se
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageReceipt
-import org.sereinfish.cat.frame.utils.toJson
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotQQEvent
 import org.sereinfish.catcat.framework.onebot.v11.message.buildMessageChain
 

@@ -3,6 +3,7 @@ package org.sereinfish.catcat.framework.onebot.v11.contact.list
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Group
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.notice.GroupMemberDecreaseEvent
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.notice.GroupMemberIncreaseEvent
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.eventhandler.extend.build.buildEventHandler
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 internal class DynamicGroupList(
     val bot: OneBot
-): ConcurrentHashMap<Long, Group>() {
+): ConcurrentHashMap<UniversalId, Group>() {
     private val logger = logger()
 
     init {
@@ -51,7 +52,7 @@ internal class DynamicGroupList(
         })
     }
 
-    override fun get(key: Long): Group? {
+    override fun get(key: UniversalId): Group? {
         return super.get(key) ?: runCatching {
             OneBotGroup.build(bot, key)
         }.getOrNull()?.also {

@@ -10,6 +10,7 @@ import org.sereinfish.cat.frame.utils.toJson
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.connect.api.entity.MessageReceiptImpl
 import org.sereinfish.catcat.framework.onebot.v11.connect.api.entity.parser.ApiResponseParser
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalMessageId
 
 /**
  * 消息回执
@@ -33,6 +34,6 @@ data class MessageReceiptMateData(
     }
 
     fun parser(bot: OneBot, message: Message): MessageReceipt {
-        return MessageReceiptImpl(bot, bot, message, messageId)
+        return MessageReceiptImpl(bot, bot, message, messageId.toUniversalMessageId())
     }
 }

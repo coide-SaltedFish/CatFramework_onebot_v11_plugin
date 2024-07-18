@@ -6,6 +6,7 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageCh
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageFactory
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.element.*
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.forward.ForwardMessageFactory
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.utils.toClass
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
@@ -22,9 +23,10 @@ class BuildMessageChain: MessageFactory {
         return this
     }
 
-    override fun at(target: Long): At {
+    override fun at(target: UniversalId): At {
         return OneBotAt(target)
     }
+
 
     override fun atAll(): AtAll {
         return OneBotAtAll()
@@ -38,7 +40,7 @@ class BuildMessageChain: MessageFactory {
         return OneBotMessageParser.parse(JsonParser.parseString(data))
     }
 
-    override fun face(id: Int): Face {
+    override fun face(id: UniversalId): Face {
         return OneBotFace(id)
     }
 
@@ -46,7 +48,7 @@ class BuildMessageChain: MessageFactory {
         return OneBotForwardMessageFactory()
     }
 
-    override fun reply(messageId: Int): Reply {
+    override fun reply(messageId: UniversalId): Reply {
         return OneBotReply(messageId)
     }
 

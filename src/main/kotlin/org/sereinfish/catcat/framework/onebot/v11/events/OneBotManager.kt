@@ -5,12 +5,14 @@ import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.Bot
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.BotManager
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.config.getClassOrNull
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.PluginMain
 import org.sereinfish.catcat.framework.onebot.v11.config.OneBotConnectInfo
 import org.sereinfish.catcat.framework.onebot.v11.connect.websocket.reverse.OneBotReverseWebSocket
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalId
 import org.sereinfish.catcat.framework.onebot.v11.utils.isTrue
 
 /**
@@ -18,9 +20,9 @@ import org.sereinfish.catcat.framework.onebot.v11.utils.isTrue
  */
 object OneBotManager {
     private val logger = logger()
-    private val botMap = HashMap<Long, OneBot>()
+    private val botMap = HashMap<UniversalId, OneBot>()
 
-    operator fun get(id: Long) = botMap[id]
+    operator fun get(id: UniversalId) = botMap[id]
 
     init {
         loadConfigBot() // 加载已配置的Bot

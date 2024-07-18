@@ -12,6 +12,7 @@ import org.sereinfish.catcat.framework.onebot.v11.events.EventParser
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEventType
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
 
 class OneBotGroupFileUploadEvent(
     override val bot: Bot,
@@ -33,9 +34,9 @@ class OneBotGroupFileUploadEvent(
             val obj = data.asJsonObject
 
             val time = obj["time"].asLong
-            val selfId = obj["self_id"].asLong
-            val groupId = obj["group_id"].asLong
-            val senderId = obj["user_id"].asLong
+            val selfId = obj["self_id"].asLong.toUniversalId()
+            val groupId = obj["group_id"].asLong.toUniversalId()
+            val senderId = obj["user_id"].asLong.toUniversalId()
             val fileInfo = obj["file"].asJsonObject
 
             val bot = OneBotManager[selfId] ?: error("无法找到对应Bot对象，无法完成事件实例化：$selfId")

@@ -6,36 +6,39 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Group
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Member
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageReceipt
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.contact.list.DynamicGroupMemberList
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotGroupMessageSendingEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotGroupMessageSentEvent
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalId
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
 
 class OneBotGroup private constructor(
     override val bot: OneBot,
-    override val id: Long,
+    override val id: OneBotUniversalId,
     override var groupName: String
 ): Group {
 
-    override val members: Map<Long, Member> = DynamicGroupMemberList(bot, this)
+    override val members: Map<UniversalId, Member> = DynamicGroupMemberList(bot, this)
     override val name: String = groupName
 
     companion object {
-        internal fun build(bot: OneBot, id: Long): OneBotGroup {
+        internal fun build(bot: OneBot, id: UniversalId): OneBotGroup {
             val data = runBlocking { bot.connect.api.getGroupInfo(id) }.getOrThrow()
-            return OneBotGroup(bot, data.groupId, data.groupName)
+            return OneBotGroup(bot, data.groupId.toUniversalId(), data.groupName)
         }
 
         internal fun builds(bot: OneBot): List<OneBotGroup> {
             val data = runBlocking { bot.connect.api.getGroupList() }.getOrThrow()
             return data.list.map {
-                OneBotGroup(bot, it.groupId, it.groupName)
+                OneBotGroup(bot, it.groupId.toUniversalId(), it.groupName)
             }
         }
     }
 
-    override suspend fun admin(id: Long, set: Boolean): Boolean {
+    override suspend fun admin(id: UniversalId, set: Boolean): Boolean {
         return bot.connect.api.setGroupAdmin(this.id, id, set)
     }
 
@@ -43,7 +46,7 @@ class OneBotGroup private constructor(
         return bot.connect.api.groupWholeBan(this.id, flag)
     }
 
-    override suspend fun kick(id: Long, allowRejoinAfterKickout: Boolean): Boolean {
+    override suspend fun kick(id: UniversalId, allowRejoinAfterKickout: Boolean): Boolean {
         return bot.connect.api.groupKick(this.id, id, allowRejoinAfterKickout)
     }
 
@@ -51,7 +54,7 @@ class OneBotGroup private constructor(
         return bot.connect.api.groupLeave(this.id, isDismiss)
     }
 
-    override suspend fun mute(id: Long, time: Int): Boolean {
+    override suspend fun mute(id: UniversalId, time: Int): Boolean {
         return bot.connect.api.groupBan(this.id, id, time.toLong())
     }
 

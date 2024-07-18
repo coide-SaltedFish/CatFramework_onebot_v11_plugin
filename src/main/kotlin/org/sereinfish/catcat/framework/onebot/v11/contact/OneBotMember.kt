@@ -7,37 +7,46 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Member
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageReceipt
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSendingEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSentEvent
 import org.sereinfish.catcat.framework.onebot.v11.message.buildMessageChain
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalId
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
 
 class OneBotMember private constructor(
     bot: OneBot,
     override val group: Group,
-    id: Long,
+    id: OneBotUniversalId,
     nickname: String,
     override var cardName: String,
     override var specialTitle: String,
     val role: String,
 ): Member, OneBotUser(bot, id, nickname) {
-    override var admin: Boolean = false
-        get() = role == "admin"
+    override var admin: Boolean
+        get() = (role == "admin") or (role == "owner")
+        set(value) {
+            when(role) {
+                "owner" -> error("无权设置群主权限")
+                "admin" -> runBlocking { bot.connect.api.setGroupAdmin(group.id, id, value) }
+            }
+        }
 
     override val name: String = nickname
     override val remarkNickname: String = cardName
 
     companion object {
-        internal fun build(bot: OneBot, group: Group, id: Long): OneBotMember {
+        internal fun build(bot: OneBot, group: Group, id: UniversalId): OneBotMember {
             val data = runBlocking { bot.connect.api.getGroupMemberInfo(group.id, id) }.getOrThrow()
-            return OneBotMember(bot, group, data.userId, data.nickname, data.cardName, data.title, data.role)
+            return OneBotMember(bot, group, data.userId.toUniversalId(), data.nickname, data.cardName, data.title, data.role)
         }
 
         internal fun builds(bot: OneBot, group: Group): List<OneBotMember> {
             val data = runBlocking { bot.connect.api.getGroupMemberList(group.id) }.getOrThrow()
             return data.list.map {
-                OneBotMember(bot, group, it.userId, it.nickname, it.cardName, it.title, it.role)
+                OneBotMember(bot, group, it.userId.toUniversalId(), it.nickname, it.cardName, it.title, it.role)
             }
         }
     }

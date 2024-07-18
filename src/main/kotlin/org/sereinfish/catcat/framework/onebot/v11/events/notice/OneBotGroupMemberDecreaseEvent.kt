@@ -11,6 +11,7 @@ import org.sereinfish.catcat.framework.onebot.v11.events.EventParser
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEventType
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
 
 class OneBotGroupMemberDecreaseEvent(
     override val bot: Bot,
@@ -33,12 +34,12 @@ class OneBotGroupMemberDecreaseEvent(
             val obj = data.asJsonObject
 
             val time = obj["time"].asLong
-            val selfId = obj["self_id"].asLong
+            val selfId = obj["self_id"].asLong.toUniversalId()
             val subType = obj["sub_type"].asString
 
-            val groupId = obj["group_id"].asLong
-            val operatorId = obj["operator_id"].asLong
-            val userId = obj["user_id"].asLong
+            val groupId = obj["group_id"].asLong.toUniversalId()
+            val operatorId = obj["operator_id"].asLong.toUniversalId()
+            val userId = obj["user_id"].asLong.toUniversalId()
 
             val type = when(subType) {
                 "leave" -> GroupMemberDecreaseEvent.DecreaseType.LEAVE

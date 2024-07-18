@@ -10,10 +10,12 @@ import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSendingEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSentEvent
 import org.sereinfish.catcat.framework.onebot.v11.message.buildMessageChain
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalId
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
 
 class OneBotFriend private constructor(
     bot: OneBot,
-    id: Long,
+    id: OneBotUniversalId,
     nickname: String,
     override val remarkNickname: String
 ): Friend, OneBotUser(bot, id, nickname) {
@@ -24,7 +26,7 @@ class OneBotFriend private constructor(
             // 获取好友信息
             val data = runBlocking { bot.connect.api.getFriendList() }.getOrThrow()
             return data.list.map {
-                OneBotFriend(bot, it.userId, it.nickname, it.remark)
+                OneBotFriend(bot, it.userId.toUniversalId(), it.nickname, it.remark)
             }
         }
     }

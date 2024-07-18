@@ -2,6 +2,7 @@ package org.sereinfish.catcat.framework.onebot.v11.connect.api
 
 import com.google.gson.JsonElement
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.catcat.framework.onebot.v11.connect.api.entity.mate.*
 
 /**
@@ -11,20 +12,20 @@ interface OneBotApi {
     /**
      * 发送私聊消息
      */
-    suspend fun sendPrivateMsg(userId: Long, message: Message, autoEscape: Boolean = true): Result<MessageReceiptMateData>
+    suspend fun sendPrivateMsg(userId: UniversalId, message: Message, autoEscape: Boolean = true): Result<MessageReceiptMateData>
 
     /**
      * 发送群消息
      */
-    suspend fun sendGroupMsg(group: Long, message: Message, autoEscape: Boolean = true): Result<MessageReceiptMateData>
+    suspend fun sendGroupMsg(group: UniversalId, message: Message, autoEscape: Boolean = true): Result<MessageReceiptMateData>
 
     /**
      * 发送消息
      */
     suspend fun sendMsg(
         messageType: String,
-        userId: Long?,
-        group: Long? = null,
+        userId: UniversalId?,
+        group: UniversalId? = null,
         message: Message,
         autoEscape: Boolean = true
     ): Result<MessageReceiptMateData>
@@ -32,12 +33,12 @@ interface OneBotApi {
     /**
      * 撤回消息
      */
-    suspend fun deleteMsg(messageId: Int): Boolean
+    suspend fun deleteMsg(messageId: UniversalId): Boolean
 
     /**
      * 获取消息
      */
-    suspend fun getMsg(messageId: Int): Result<GetMessageMateData>
+    suspend fun getMsg(messageId: UniversalId): Result<GetMessageMateData>
 
     /**
      * 获取合并转发消息
@@ -47,47 +48,47 @@ interface OneBotApi {
     /**
      * 发送好友赞
      */
-    suspend fun sendLike(userId: Long, times: Int): Boolean
+    suspend fun sendLike(userId: UniversalId, times: Int): Boolean
 
     /**
      * 群组踢人
      */
-    suspend fun groupKick(group: Long, userId: Long, rejectAddRequest: Boolean): Boolean
+    suspend fun groupKick(group: UniversalId, userId: UniversalId, rejectAddRequest: Boolean): Boolean
 
     /**
      * 群组禁言
      */
-    suspend fun groupBan(group: Long, userId: Long, duration: Long): Boolean
+    suspend fun groupBan(group: UniversalId, userId: UniversalId, duration: Long): Boolean
 
     /**
      * 全体禁言
      */
-    suspend fun groupWholeBan(group: Long, enable: Boolean): Boolean
+    suspend fun groupWholeBan(group: UniversalId, enable: Boolean): Boolean
 
     /**
      * 群组设置管理员
      */
-    suspend fun setGroupAdmin(group: Long, userId: Long, enable: Boolean): Boolean
+    suspend fun setGroupAdmin(group: UniversalId, userId: UniversalId, enable: Boolean): Boolean
 
     /**
      * 设置群组匿名
      */
-    suspend fun setGroupAnonymous(group: Long, enable: Boolean): Boolean
+    suspend fun setGroupAnonymous(group: UniversalId, enable: Boolean): Boolean
 
     /**
      * 设置群名
      */
-    suspend fun setGroupName(group: Long, name: String): Boolean
+    suspend fun setGroupName(group: UniversalId, name: String): Boolean
 
     /**
      * 退出群组
      */
-    suspend fun groupLeave(group: Long, isDismiss: Boolean): Boolean
+    suspend fun groupLeave(group: UniversalId, isDismiss: Boolean): Boolean
 
     /**
      * 设置群组专属头衔
      */
-    suspend fun setGroupSpecialTitle(group: Long, userId: Long, specialTitle: String, duration: Long): Boolean
+    suspend fun setGroupSpecialTitle(group: UniversalId, userId: UniversalId, specialTitle: String, duration: Long): Boolean
 
     /**
      * 处理加好友请求
@@ -102,7 +103,7 @@ interface OneBotApi {
     /**
      * 群组匿名禁言
      */
-    suspend fun groupAnonymousBan(group: Long, anonymousFlag: String, duration: Long): Boolean
+    suspend fun groupAnonymousBan(group: UniversalId, anonymousFlag: String, duration: Long): Boolean
 
     /**
      * 获取登录号信息
@@ -112,7 +113,7 @@ interface OneBotApi {
     /**
      * 获取陌生人信息
      */
-    suspend fun getStrangerInfo(userId: Long, noCache: Boolean = false): Result<UserInfoMateData>
+    suspend fun getStrangerInfo(userId: UniversalId, noCache: Boolean = false): Result<UserInfoMateData>
 
     /**
      * 获取好友列表
@@ -122,7 +123,7 @@ interface OneBotApi {
     /**
      * 获取群信息
      */
-    suspend fun getGroupInfo(group: Long, noCache: Boolean = false): Result<GroupInfoMateData>
+    suspend fun getGroupInfo(group: UniversalId, noCache: Boolean = false): Result<GroupInfoMateData>
 
     /**
      * 获取群
@@ -132,17 +133,17 @@ interface OneBotApi {
     /**
      * 获取群成员信息
      */
-    suspend fun getGroupMemberInfo(group: Long, userId: Long, noCache: Boolean = false): Result<GroupMemberInfoMateData>
+    suspend fun getGroupMemberInfo(group: UniversalId, userId: UniversalId, noCache: Boolean = false): Result<GroupMemberInfoMateData>
 
     /**
      * 获取群成员列表
      */
-    suspend fun getGroupMemberList(group: Long): Result<GroupMemberListInfoMateData>
+    suspend fun getGroupMemberList(group: UniversalId): Result<GroupMemberListInfoMateData>
 
     /**
      * 获取群荣誉信息
      */
-    suspend fun getGroupHonorInfo(group: Long, type: String): JsonElement
+    suspend fun getGroupHonorInfo(group: UniversalId, type: String): JsonElement
 
     /**
      * 获取Cookies

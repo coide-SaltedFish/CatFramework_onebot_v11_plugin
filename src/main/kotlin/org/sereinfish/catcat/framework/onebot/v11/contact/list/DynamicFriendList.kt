@@ -2,6 +2,7 @@ package org.sereinfish.catcat.framework.onebot.v11.contact.list
 
 import kotlinx.coroutines.launch
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Friend
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.cat.frame.utils.creatContextScope
 import org.sereinfish.cat.frame.utils.logger
@@ -13,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class DynamicFriendList(
     val bot: OneBot
-): ConcurrentHashMap<Long, Friend>() {
+): ConcurrentHashMap<UniversalId, Friend>() {
     private val logger = logger()
     private val scope = creatContextScope()
 

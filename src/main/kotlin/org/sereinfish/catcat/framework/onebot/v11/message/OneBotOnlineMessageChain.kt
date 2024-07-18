@@ -7,12 +7,14 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.User
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageReceipt
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.OnlineMessageChain
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalMessageId
 
 internal class OneBotOnlineMessageChain(
     override val bot: OneBot,
-    override val messageId: Int,
+    override val messageId: UniversalId,
     override val sender: User,
     override val target: Contact
 ): OnlineMessageChain, OneBotMessageChain() {

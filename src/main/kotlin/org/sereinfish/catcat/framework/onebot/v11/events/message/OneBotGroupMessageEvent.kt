@@ -6,17 +6,20 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Group
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.Member
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.message.GroupMessageEvent
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.OnlineMessageChain
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.events.EventParser
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEventType
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
 import org.sereinfish.catcat.framework.onebot.v11.message.OneBotMessageParser
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalMessageId
 
 class OneBotGroupMessageEvent(
     bot: OneBot,
     time: Long,
-    messageId: Int,
+    messageId: UniversalId,
     override val group: Group,
     override val sender: Member,
     override val message: OnlineMessageChain,
@@ -36,10 +39,10 @@ class OneBotGroupMessageEvent(
             val obj = data.asJsonObject
 
             val time: Long = obj["time"].asLong
-            val selfId: Long = obj["self_id"].asLong
-            val messageId: Int = obj["message_id"].asInt
-            val targetId: Long = obj["group_id"].asLong
-            val senderId: Long = obj["user_id"].asLong
+            val selfId = obj["self_id"].asLong.toUniversalId()
+            val messageId = obj["message_id"].asInt.toUniversalMessageId()
+            val targetId = obj["group_id"].asLong.toUniversalId()
+            val senderId = obj["user_id"].asLong.toUniversalId()
             val message: JsonElement = obj["message"]
             val rawMessage: String = obj["raw_message"].asString
 

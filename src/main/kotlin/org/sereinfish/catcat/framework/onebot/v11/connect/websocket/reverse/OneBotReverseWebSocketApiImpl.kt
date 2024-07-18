@@ -6,6 +6,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.cat.frame.utils.toJson
@@ -23,17 +24,25 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
     private val _webSocket: OneBotReverseWebSocket get() = webSocket ?: error("尚未配置 ReverseWebSocket : NULL")
     var webSocket: OneBotReverseWebSocket? = null
 
-    override suspend fun sendPrivateMsg(userId: Long, message: Message, autoEscape: Boolean): Result<MessageReceiptMateData> {
+    override suspend fun sendPrivateMsg(
+        userId: UniversalId,
+        message: Message,
+        autoEscape: Boolean
+    ): Result<MessageReceiptMateData> {
         return sendData(MessageReceiptMateData, "send_private_msg", 120 * 1000) {
-            "user_id" to userId
+            "user_id" to userId.id
             "message" to message.encode()
             "auto_escape" to autoEscape
         }
     }
 
-    override suspend fun sendGroupMsg(group: Long, message: Message, autoEscape: Boolean): Result<MessageReceiptMateData> {
+    override suspend fun sendGroupMsg(
+        group: UniversalId,
+        message: Message,
+        autoEscape: Boolean
+    ): Result<MessageReceiptMateData> {
         return sendData(MessageReceiptMateData, "send_group_msg", 120 * 1000) {
-            "group_id" to group
+            "group_id" to group.id
             "message" to message.encode()
             "auto_escape" to autoEscape
         }
@@ -41,33 +50,33 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
 
     override suspend fun sendMsg(
         messageType: String,
-        userId: Long?,
-        group: Long?,
+        userId: UniversalId?,
+        group: UniversalId?,
         message: Message,
         autoEscape: Boolean
     ): Result<MessageReceiptMateData> {
         return sendData(MessageReceiptMateData, "send_msg", 120 * 1000) {
             "message_type" to messageType
             userId?.let {
-                "user_id" to it
+                "user_id" to it.id
             }
             group?.let {
-                "group_id" to it
+                "group_id" to it.id
             }
             "message" to message.encode()
             "auto_escape" to autoEscape
         }
     }
 
-    override suspend fun deleteMsg(messageId: Int): Boolean {
+    override suspend fun deleteMsg(messageId: UniversalId): Boolean {
         return sendData(EmptyData, "delete_msg"){
-            "message_id" to messageId
+            "message_id" to messageId.id
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun getMsg(messageId: Int): Result<GetMessageMateData> {
+    override suspend fun getMsg(messageId: UniversalId): Result<GetMessageMateData> {
         return sendData(GetMessageMateData, "get_msg") {
-            "message_id" to messageId
+            "message_id" to messageId.id
         }
     }
 
@@ -80,69 +89,74 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
         }
     }
 
-    override suspend fun sendLike(userId: Long, times: Int): Boolean {
+    override suspend fun sendLike(userId: UniversalId, times: Int): Boolean {
         return sendData(EmptyData, "send_like"){
-            "user_id" to userId
+            "user_id" to userId.id
             "times" to times
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun groupKick(group: Long, userId: Long, rejectAddRequest: Boolean): Boolean {
+    override suspend fun groupKick(group: UniversalId, userId: UniversalId, rejectAddRequest: Boolean): Boolean {
         return sendData(EmptyData, "set_group_kick"){
-            "group_id" to group
-            "user_id" to userId
+            "group_id" to group.id
+            "user_id" to userId.id
             "reject_add_request" to rejectAddRequest
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun groupBan(group: Long, userId: Long, duration: Long): Boolean {
+    override suspend fun groupBan(group: UniversalId, userId: UniversalId, duration: Long): Boolean {
         return sendData(EmptyData, "set_group_ban"){
-            "group_id" to group
-            "user_id" to userId
+            "group_id" to group.id
+            "user_id" to userId.id
             "duration" to duration
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun groupWholeBan(group: Long, enable: Boolean): Boolean {
+    override suspend fun groupWholeBan(group: UniversalId, enable: Boolean): Boolean {
         return sendData(EmptyData, "set_group_whole_ban"){
-            "group_id" to group
+            "group_id" to group.id
             "enable" to enable
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun setGroupAdmin(group: Long, userId: Long, enable: Boolean): Boolean {
+    override suspend fun setGroupAdmin(group: UniversalId, userId: UniversalId, enable: Boolean): Boolean {
         return sendData(EmptyData, "set_group_admin"){
-            "group_id" to group
-            "user_id" to userId
+            "group_id" to group.id
+            "user_id" to userId.id
             "enable" to enable
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun setGroupAnonymous(group: Long, enable: Boolean): Boolean {
+    override suspend fun setGroupAnonymous(group: UniversalId, enable: Boolean): Boolean {
         return sendData(EmptyData, "set_group_anonymous"){
-            "group_id" to group
+            "group_id" to group.id
             "enable" to enable
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun setGroupName(group: Long, name: String): Boolean {
+    override suspend fun setGroupName(group: UniversalId, name: String): Boolean {
         return sendData(EmptyData, "set_group_name"){
-            "group_id" to group
+            "group_id" to group.id
             "name" to name
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun groupLeave(group: Long, isDismiss: Boolean): Boolean {
+    override suspend fun groupLeave(group: UniversalId, isDismiss: Boolean): Boolean {
         return sendData(EmptyData, "set_group_leave"){
-            "group_id" to group
+            "group_id" to group.id
             "is_dismiss" to isDismiss
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun setGroupSpecialTitle(group: Long, userId: Long, specialTitle: String, duration: Long): Boolean {
+    override suspend fun setGroupSpecialTitle(
+        group: UniversalId,
+        userId: UniversalId,
+        specialTitle: String,
+        duration: Long
+    ): Boolean {
         return sendData(EmptyData, "set_group_special_title"){
-            "group_id" to group
-            "user_id" to userId
+            "group_id" to group.id
+            "user_id" to userId.id
             "special_title" to specialTitle
             "duration" to duration
         }.getOrThrow().isSuccess()
@@ -165,9 +179,9 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
         }.getOrThrow().isSuccess()
     }
 
-    override suspend fun groupAnonymousBan(group: Long, anonymousFlag: String, duration: Long): Boolean {
+    override suspend fun groupAnonymousBan(group: UniversalId, anonymousFlag: String, duration: Long): Boolean {
         return sendData(EmptyData, "set_group_anonymous_ban"){
-            "group_id" to group
+            "group_id" to group.id
             "anonymous_flag" to anonymousFlag
             "duration" to duration
         }.getOrThrow().isSuccess()
@@ -177,9 +191,9 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
         return sendData(LoginBotInfoMateData, "get_login_info")
     }
 
-    override suspend fun getStrangerInfo(userId: Long, noCache: Boolean): Result<UserInfoMateData> {
+    override suspend fun getStrangerInfo(userId: UniversalId, noCache: Boolean): Result<UserInfoMateData> {
         return sendData(UserInfoMateData, "get_stranger_info") {
-            "user_id" to userId
+            "user_id" to userId.id
             "no_cache" to noCache
         }
     }
@@ -188,9 +202,9 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
         return sendData(FriendListMateData, "get_friend_list", 60 * 1000)
     }
 
-    override suspend fun getGroupInfo(group: Long, noCache: Boolean): Result<GroupInfoMateData> {
+    override suspend fun getGroupInfo(group: UniversalId, noCache: Boolean): Result<GroupInfoMateData> {
         return sendData(GroupInfoMateData, "get_group_info"){
-            "group_id" to group
+            "group_id" to group.id
             "no_cache" to noCache
         }
     }
@@ -199,21 +213,25 @@ internal class OneBotReverseWebSocketApiImpl: OneBotApi {
         return sendData(GroupListInfoMateData, "get_group_list", 60 * 1000)
     }
 
-    override suspend fun getGroupMemberInfo(group: Long, userId: Long, noCache: Boolean): Result<GroupMemberInfoMateData> {
+    override suspend fun getGroupMemberInfo(
+        group: UniversalId,
+        userId: UniversalId,
+        noCache: Boolean
+    ): Result<GroupMemberInfoMateData> {
         return sendData(GroupMemberInfoMateData, "get_group_member_info"){
-            "group_id" to group
-            "user_id" to userId
+            "group_id" to group.id
+            "user_id" to userId.id
             "no_cache" to noCache
         }
     }
 
-    override suspend fun getGroupMemberList(group: Long): Result<GroupMemberListInfoMateData> {
+    override suspend fun getGroupMemberList(group: UniversalId): Result<GroupMemberListInfoMateData> {
         return sendData(GroupMemberListInfoMateData, "get_group_member_list", 60 * 1000){
-            "group_id" to group
+            "group_id" to group.id
         }
     }
 
-    override suspend fun getGroupHonorInfo(group: Long, type: String): JsonElement {
+    override suspend fun getGroupHonorInfo(group: UniversalId, type: String): JsonElement {
         TODO("Not yet implemented")
     }
 

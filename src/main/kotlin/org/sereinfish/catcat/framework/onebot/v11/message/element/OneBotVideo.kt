@@ -17,7 +17,11 @@ abstract class OneBotVideo: Video, MultiMediaMessage {
             val obj = data.asJsonObject
 
             val file = obj["file"].asString
-            val url = obj["url"].asString
+            val url = if (obj.has("url"))
+                obj["url"].asString
+            else {
+                obj["path"].asString
+            }
 
             return OneBotOnlineVideo(file, url)
         }

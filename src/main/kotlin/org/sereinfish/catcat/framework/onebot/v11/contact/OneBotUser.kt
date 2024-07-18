@@ -13,10 +13,11 @@ import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSendingEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.message.send.OneBotPrivateSentEvent
 import org.sereinfish.catcat.framework.onebot.v11.message.buildMessageChain
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalId
 
 open class OneBotUser internal constructor(
     override val bot: OneBot,
-    override val id: Long,
+    override val id: OneBotUniversalId,
     override val nickname: String
 ): User {
     override val name: String = nickname
@@ -25,10 +26,10 @@ open class OneBotUser internal constructor(
         val client = OkHttpClient.Builder()
             .build()
 
-        internal fun build(bot: OneBot, id: Long): OneBotUser {
+        internal fun build(bot: OneBot, id: OneBotUniversalId): OneBotUser {
             // 获取用户信息
             val data = runBlocking { bot.connect.api.getStrangerInfo(id) }.getOrThrow()
-            return OneBotUser(bot, data.userId, data.nickname)
+            return OneBotUser(bot, OneBotUniversalId(data.userId), data.nickname)
         }
     }
 

@@ -1,6 +1,7 @@
 package org.sereinfish.catcat.framework.onebot.v11.message.element.forward
 
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.catcat.framework.onebot.v11.message.element.OneBotForward
 
 class OneBotOfflineForward(
@@ -15,7 +16,7 @@ class OneBotOfflineForward(
 
     class OneBotOfflineNode(
         override val message: Message,
-        override val userId: Long,
+        override val userId: UniversalId,
         override val nickname: String
     ) : OneBotNode
 }

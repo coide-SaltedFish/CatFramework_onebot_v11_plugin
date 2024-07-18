@@ -62,3 +62,7 @@ val JsonElement.asJsonObjectOrNUll: JsonObject? get() =
     if (this.isJsonObject)
         this.asJsonObject
     else null
+
+
+internal fun Long.toUniversalId() = OneBotUniversalId(this)
+internal fun Int.toUniversalMessageId() = OneBotUniversalMessageId(this)

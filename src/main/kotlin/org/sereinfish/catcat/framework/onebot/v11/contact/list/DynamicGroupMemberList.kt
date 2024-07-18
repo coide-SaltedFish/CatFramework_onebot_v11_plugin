@@ -4,18 +4,20 @@ import kotlinx.coroutines.runBlocking
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.Bot
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.notice.GroupMemberDecreaseEvent
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.notice.GroupMemberIncreaseEvent
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.event.EventManager
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.eventhandler.extend.build.buildEventHandler
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.contact.OneBotGroup
 import org.sereinfish.catcat.framework.onebot.v11.contact.OneBotMember
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalId
 import java.util.concurrent.ConcurrentHashMap
 
 internal class DynamicGroupMemberList(
     val bot: OneBot,
     val group: OneBotGroup,
-): ConcurrentHashMap<Long, OneBotMember>() {
+): ConcurrentHashMap<UniversalId, OneBotMember>() {
     private val logger = logger()
 
     init {
@@ -54,7 +56,7 @@ internal class DynamicGroupMemberList(
         })
     }
 
-    override fun get(key: Long): OneBotMember? {
+    override fun get(key: UniversalId): OneBotMember? {
         return super.get(key) ?: runCatching { OneBotMember.build(bot, group, key) }.getOrNull()?.also {
             this[it.id] = it
         }

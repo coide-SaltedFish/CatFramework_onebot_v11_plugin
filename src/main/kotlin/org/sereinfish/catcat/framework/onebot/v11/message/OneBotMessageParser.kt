@@ -6,11 +6,13 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.User
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.Message
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.OnlineMessageChain
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.cat.frame.utils.toJson
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
 import org.sereinfish.catcat.framework.onebot.v11.message.element.*
+import org.sereinfish.catcat.framework.onebot.v11.utils.OneBotUniversalMessageId
 import java.util.concurrent.ConcurrentHashMap
 
 class OneBotMessageParser {
@@ -65,7 +67,7 @@ class OneBotMessageParser {
     /**
      * 解析为在线消息
      */
-    fun parserOnline(bot: OneBot, target: Contact, sender: User, messageId: Int, data: JsonElement): OnlineMessageChain {
+    fun parserOnline(bot: OneBot, target: Contact, sender: User, messageId: UniversalId, data: JsonElement): OnlineMessageChain {
         val chain = OneBotOnlineMessageChain(bot, messageId, sender, target)
         data.asJsonArray.forEach {
             val type = it.asJsonObject["type"].asString
@@ -88,7 +90,7 @@ class OneBotMessageParser {
         return chain
     }
 
-    internal fun parserOnline(bot: OneBot, target: Contact, sender: User, messageId: Int, message: MessageChain): OnlineMessageChain {
+    internal fun parserOnline(bot: OneBot, target: Contact, sender: User, messageId: UniversalId, message: MessageChain): OnlineMessageChain {
         val chain = OneBotOnlineMessageChain(bot, messageId, sender, target)
         chain.marge(message)
         return chain

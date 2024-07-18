@@ -1,5 +1,6 @@
 package org.sereinfish.catcat.framework.onebot.v11.message.element.image
 
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.catcat.framework.onebot.v11.message.element.OneBotImage
 import org.sereinfish.catcat.framework.onebot.v11.utils.buildCatMap
@@ -17,7 +18,7 @@ class OneBotOfflineImage private constructor(
     val isProxy: Boolean = true,
     val timeout: Long? = null
 ): OneBotImage(){
-    override val id: String get() = error("离线图片尚未分配ID")
+    override val id: UniversalId get() = error("离线图片尚未分配ID")
 
     companion object {
         private val logger = logger()

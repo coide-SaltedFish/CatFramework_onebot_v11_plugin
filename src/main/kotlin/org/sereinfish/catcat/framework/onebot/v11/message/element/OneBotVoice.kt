@@ -16,7 +16,11 @@ abstract class OneBotVoice: Voice, MultiMediaMessage {
 
             val file = obj["file"].asString
             val magic = if (obj.has("magic")) obj["magic"].asInt != 0 else false
-            val url = obj["url"].asString
+            val url = if (obj.has("url"))
+                obj["url"].asString
+            else {
+                obj["path"].asString
+            }
 
             return OneBotOnlineVoice(file, magic, url)
         }

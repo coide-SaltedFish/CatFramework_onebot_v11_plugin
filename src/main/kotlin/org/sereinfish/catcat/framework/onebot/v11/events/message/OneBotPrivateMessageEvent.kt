@@ -6,6 +6,7 @@ import org.catcat.sereinfish.qqbot.universal.abstraction.layer.contact.User
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.events.message.PrivateMessageEvent
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.MessageChain
 import org.catcat.sereinfish.qqbot.universal.abstraction.layer.message.OnlineMessageChain
+import org.catcat.sereinfish.qqbot.universal.abstraction.layer.utils.UniversalId
 import org.sereinfish.cat.frame.utils.logger
 import org.sereinfish.cat.frame.utils.toJson
 import org.sereinfish.catcat.framework.onebot.v11.OneBot
@@ -15,11 +16,13 @@ import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEvent
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotEventType
 import org.sereinfish.catcat.framework.onebot.v11.events.OneBotManager
 import org.sereinfish.catcat.framework.onebot.v11.message.OneBotMessageParser
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalId
+import org.sereinfish.catcat.framework.onebot.v11.utils.toUniversalMessageId
 
 class OneBotPrivateMessageEvent(
     bot: OneBot,
     time: Long,
-    messageId: Int,
+    messageId: UniversalId,
     override val type: PrivateMessageEvent.PrivateType,
     override val sender: User,
     override val message: OnlineMessageChain,
@@ -41,10 +44,10 @@ class OneBotPrivateMessageEvent(
                 val obj = data.asJsonObject
 
                 val time: Long = obj["time"].asLong
-                val selfId: Long = obj["self_id"].asLong
+                val selfId = obj["self_id"].asLong.toUniversalId()
                 val subType: String = obj["sub_type"].asString
-                val messageId: Int = obj["message_id"].asInt
-                val senderId: Long = obj["user_id"].asLong
+                val messageId = obj["message_id"].asInt.toUniversalMessageId()
+                val senderId = obj["user_id"].asLong.toUniversalId()
                 val message: JsonElement = obj["message"]
                 val rawMessage: String = obj["raw_message"].asString
 
